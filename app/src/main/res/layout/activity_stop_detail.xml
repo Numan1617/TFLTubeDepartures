@@ -6,4 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".feature.stopdetail.StopDetailActivity">
 
+  <TextView
+      android:id="@+id/text_view_stop_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      />
 </LinearLayout>
