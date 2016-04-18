@@ -5,12 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 import butterknife.Bind;
 import com.numan1617.tfltubedepartures.R;
 import com.numan1617.tfltubedepartures.base.BaseActivity;
 import com.numan1617.tfltubedepartures.base.BasePresenter;
 import com.numan1617.tfltubedepartures.network.model.StopPoint;
 import java.util.List;
+import rx.Observable;
 
 import static com.numan1617.tfltubedepartures.feature.main.MainModule.mainPresenter;
 
@@ -56,6 +58,10 @@ public class MainActivity extends BaseActivity<MainPresenter.View> implements Ma
     return this;
   }
 
+  @NonNull @Override public Observable<StopPoint> stopPointSelected() {
+    return stopListAdapter.stopPointSelected();
+  }
+
   @Override public void setStopPoints(@NonNull final List<StopPoint> stopPoints) {
     stopListAdapter.setData(stopPoints);
   }
@@ -66,5 +72,9 @@ public class MainActivity extends BaseActivity<MainPresenter.View> implements Ma
 
   @Override public void showNoStopsView(final boolean visible) {
     noStops.setVisibility(visible ? View.VISIBLE : View.GONE);
+  }
+
+  @Override public void displayStopDetails(final StopPoint stopPoint) {
+    Toast.makeText(MainActivity.this, stopPoint.commonName(), Toast.LENGTH_SHORT).show();
   }
 }

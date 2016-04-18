@@ -6,6 +6,7 @@ import com.numan1617.tfltubedepartures.base.PresenterView;
 import com.numan1617.tfltubedepartures.network.TflService;
 import com.numan1617.tfltubedepartures.network.model.StopPoint;
 import java.util.List;
+import rx.Observable;
 import rx.Scheduler;
 
 public class MainPresenter extends BasePresenter<MainPresenter.View> {
@@ -36,13 +37,22 @@ public class MainPresenter extends BasePresenter<MainPresenter.View> {
             view.setStopPoints(stopPoints);
           }
         }, Throwable::printStackTrace));
+
+    unsubscribeOnViewDetach(view.stopPointSelected()
+        .observeOn(uiScheduler)
+        .subscribeOn(ioScheduler)
+        .subscribe(view::displayStopDetails));
   }
 
   interface View extends PresenterView {
+    @NonNull Observable<StopPoint> stopPointSelected();
+
     void setStopPoints(@NonNull List<StopPoint> stopPoints);
 
     void showLoadingView(boolean visible);
 
     void showNoStopsView(boolean visible);
+
+    void displayStopDetails(StopPoint stopPoint);
   }
 }
