@@ -7,5 +7,6 @@ import rx.Observable;
 
 public interface TflService {
   Observable<List<StopPoint>> stopPoint();
+
   Observable<List<Departure>> departures(String stopPointId);
 }
