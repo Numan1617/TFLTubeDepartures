@@ -37,6 +37,8 @@ dependencies {
   testCompile 'org.mockito:mockito-core:2.0.31-beta'
 
   compile 'com.android.support:appcompat-v7:23.2.1'
+  compile 'com.android.support:design:23.2.1'
+
   compile 'io.reactivex:rxjava:1.1.1'
   compile 'com.squareup.retrofit:retrofit:1.9.0'
   compile 'com.squareup.okhttp:okhttp:2.7.5'

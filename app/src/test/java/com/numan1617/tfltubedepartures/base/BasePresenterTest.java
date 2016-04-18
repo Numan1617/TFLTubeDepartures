@@ -17,6 +17,7 @@ public abstract class BasePresenterTest<P extends BasePresenter<V>, V extends Pr
   }
 
   protected abstract P createPresenter();
+
   protected abstract V createView();
 
   protected void presenterOnViewAttached() {
