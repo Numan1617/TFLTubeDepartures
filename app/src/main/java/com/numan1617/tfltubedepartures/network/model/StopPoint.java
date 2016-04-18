@@ -1,11 +1,12 @@
 package com.numan1617.tfltubedepartures.network.model;
 
+import android.os.Parcelable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.TypeAdapterFactory;
 import java.util.List;
 
 @AutoValue
-public abstract class StopPoint {
+public abstract class StopPoint implements Parcelable {
   public abstract String id();
   public abstract String naptanId();
   public abstract double lat();

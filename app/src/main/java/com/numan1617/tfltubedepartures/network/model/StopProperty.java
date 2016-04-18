@@ -1,10 +1,11 @@
 package com.numan1617.tfltubedepartures.network.model;
 
+import android.os.Parcelable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.TypeAdapterFactory;
 
 @AutoValue
-public abstract class StopProperty {
+public abstract class StopProperty implements Parcelable {
   public abstract String category();
   public abstract String key();
   public abstract String sourceSystemKey();
