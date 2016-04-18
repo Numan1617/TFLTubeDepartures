@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
+apply from: 'tflApiKeys.gradle'
+
 android {
   compileSdkVersion 23
   buildToolsVersion "23.0.2"
@@ -12,6 +14,9 @@ android {
   }
 
   defaultConfig {
+    buildConfigField "String", "TFL_API_APP_ID",  "\"${tflApiAppId}\""
+    buildConfigField "String", "TFL_API_KEY", "\"${tflApiKey}\""
+
     applicationId "com.numan1617.tfltubedepartures"
     minSdkVersion 23
     targetSdkVersion 23
@@ -38,4 +43,9 @@ dependencies {
   provided 'com.ryanharter.auto.value:auto-value-gson:0.2.1'
   apt 'com.ryanharter.auto.value:auto-value-gson:0.2.1'
   provided 'com.google.code.findbugs:jsr305:3.0.1'
+
+  compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+
+  compile 'com.jakewharton:butterknife:8.0.0-SNAPSHOT'
+  apt 'com.jakewharton:butterknife-compiler:8.0.0-SNAPSHOT'
 }
