@@ -1,8 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
   compileSdkVersion 23
   buildToolsVersion "23.0.2"
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 
   defaultConfig {
     applicationId "com.numan1617.tfltubedepartures"
@@ -23,4 +30,12 @@ dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   testCompile 'junit:junit:4.12'
   compile 'com.android.support:appcompat-v7:23.2.1'
+  compile 'io.reactivex:rxjava:1.1.1'
+  compile 'com.squareup.retrofit:retrofit:1.9.0'
+  compile 'com.squareup.okhttp:okhttp:2.7.5'
+  compile 'com.squareup.okhttp:logging-interceptor:2.7.5'
+
+  provided 'com.ryanharter.auto.value:auto-value-gson:0.2.1'
+  apt 'com.ryanharter.auto.value:auto-value-gson:0.2.1'
+  provided 'com.google.code.findbugs:jsr305:3.0.1'
 }
