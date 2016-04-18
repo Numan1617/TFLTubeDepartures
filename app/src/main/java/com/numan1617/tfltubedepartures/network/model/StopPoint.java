@@ -6,6 +6,7 @@ import java.util.List;
 
 @AutoValue
 public abstract class StopPoint {
+  public abstract String id();
   public abstract String naptanId();
   public abstract double lat();
   public abstract double lon();

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.numan1617.tfltubedepartures.network.TflService;
+import com.numan1617.tfltubedepartures.network.model.Departure;
 import com.numan1617.tfltubedepartures.network.model.StopPoint;
 import com.numan1617.tfltubedepartures.network.model.StopPointResponse;
 import com.numan1617.tfltubedepartures.network.model.StopProperty;
@@ -16,6 +17,7 @@ import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import rx.Observable;
 
 public class RetrofitTflService implements TflService {
@@ -48,6 +50,7 @@ public class RetrofitTflService implements TflService {
         new GsonBuilder().registerTypeAdapterFactory(StopPointResponse.typeAdapterFactory())
             .registerTypeAdapterFactory(StopPoint.typeAdapterFactory())
             .registerTypeAdapterFactory(StopProperty.typeAdapterFactory())
+            .registerTypeAdapterFactory(Departure.typeAdapterFactory())
             .create();
 
     final RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("https://api.tfl.gov.uk")
@@ -62,8 +65,17 @@ public class RetrofitTflService implements TflService {
     return api.stopPoint().map(StopPointResponse::stopPoints);
   }
 
+  @Override public Observable<List<Departure>> departures(final String stopPointId) {
+    return api.departures(stopPointId);
+  }
+
   private interface Api {
     @GET("/StopPoint?lat=51.5065&lon=-0.2081&stopTypes=NaptanMetroStation,NaptanRailStation&radius=900&useStopPointHierarchy=false&returnLines=True")
     Observable<StopPointResponse> stopPoint();
+
+    @GET("/StopPoint/{stopPointId}/Arrivals")
+    Observable<List<Departure>> departures(
+        @Path("stopPointId") String stopPointId
+    );
   }
 }
