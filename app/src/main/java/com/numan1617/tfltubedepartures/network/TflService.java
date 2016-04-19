@@ -6,7 +6,7 @@ import java.util.List;
 import rx.Observable;
 
 public interface TflService {
-  Observable<List<StopPoint>> stopPoint();
+  Observable<List<StopPoint>> stopPoint(double latitude, double longitude);
 
   Observable<List<Departure>> departures(String stopPointId);
 }
