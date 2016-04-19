@@ -4,6 +4,7 @@ import com.numan1617.tfltubedepartures.base.BasePresenterTest;
 import com.numan1617.tfltubedepartures.network.TflService;
 import com.numan1617.tfltubedepartures.network.model.Departure;
 import com.numan1617.tfltubedepartures.network.model.StopPoint;
+import com.numan1617.tfltubedepartures.network.model.StopProperty;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -68,6 +69,31 @@ public class StopDetailPresenterTest
     verify(tflService, times(2)).departures(stopId);
   }
 
+  @Test public void setStopPoint_setFacilities() {
+    presenterOnViewAttached();
+    final StopPoint stopPoint = mock(StopPoint.class);
+    final String stopId = "StopId";
+    when(stopPoint.id()).thenReturn(stopId);
+
+    final StopProperty notFacility = createStopProperty("NotFacility", "", "");
+    final StopProperty notActive = createStopProperty("Facility", "", "no");
+    final StopProperty zeroInStop = createStopProperty("Facility", "", "0");
+    final StopProperty otherFacility = createStopProperty("Facility", "Other Facilities", "");
+    final StopProperty wifiFacility = createStopProperty("Facility", "Wifi", "yes");
+    final StopProperty escalatorsFacility = createStopProperty("Facility", "Escalators", "3");
+
+    when(stopPoint.additionalProperties()).thenReturn(
+        Arrays.asList(notFacility, notActive, zeroInStop, otherFacility, wifiFacility,
+            escalatorsFacility));
+
+    when(tflService.departures(any())).thenReturn(Observable.just(Arrays.asList(null, null)));
+
+    presenter.setStopPoint(stopPoint);
+
+    ioTestScheduler.advanceTimeBy(31, TimeUnit.SECONDS);
+    verify(view).setFacilities(Arrays.asList(wifiFacility.key(), escalatorsFacility.key()));
+  }
+
   @Test public void onReceiveDepartures_sortByTimeToStop() {
     presenterOnViewAttached();
 
@@ -86,7 +112,6 @@ public class StopDetailPresenterTest
 
     final List<Departure> departures = Arrays.asList(departure1, departure2, departure3);
     when(tflService.departures(any())).thenReturn(Observable.just(departures));
-
 
     final List<Departure> sortedDepartures = Arrays.asList(departure3, departure1, departure2);
 
@@ -108,7 +133,6 @@ public class StopDetailPresenterTest
 
     final List<Departure> departures = Arrays.asList(departure, departure, departure, departure);
     when(tflService.departures(any())).thenReturn(Observable.just(departures));
-
 
     final List<Departure> sortedDepartures = Arrays.asList(departure, departure, departure);
 
@@ -139,5 +163,14 @@ public class StopDetailPresenterTest
     verify(view).setNextRefreshTime(29);
     ioTestScheduler.advanceTimeBy(1, TimeUnit.SECONDS);
     verify(view).setNextRefreshTime(28);
+  }
+
+  private StopProperty createStopProperty(final String category, final String key,
+      final String value) {
+    final StopProperty stopProperty = mock(StopProperty.class);
+    when(stopProperty.category()).thenReturn(category);
+    when(stopProperty.key()).thenReturn(key);
+    when(stopProperty.value()).thenReturn(value);
+    return stopProperty;
   }
 }

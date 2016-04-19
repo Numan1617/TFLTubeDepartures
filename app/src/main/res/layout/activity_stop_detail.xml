@@ -13,6 +13,12 @@
       android:layout_height="wrap_content"
       />
 
+  <org.apmem.tools.layouts.FlowLayout
+      android:id="@+id/flow_layout_facilities"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      />
+
   <android.support.v7.widget.RecyclerView
       android:id="@+id/recycler_view_departure_list"
       android:layout_width="match_parent"

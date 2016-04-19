@@ -6,6 +6,8 @@ import com.numan1617.tfltubedepartures.base.PresenterView;
 import com.numan1617.tfltubedepartures.network.TflService;
 import com.numan1617.tfltubedepartures.network.model.Departure;
 import com.numan1617.tfltubedepartures.network.model.StopPoint;
+import com.numan1617.tfltubedepartures.network.model.StopProperty;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +36,10 @@ class StopDetailPresenter extends BasePresenter<StopDetailPresenter.View> {
 
   public void setStopPoint(final StopPoint stopPoint) {
     view.setStopName(stopPoint.commonName());
+
+    final List<String> facilities = getFilteredFacilities(stopPoint);
+    view.setFacilities(facilities);
+
     unsubscribeOnViewDetach(Observable.interval(1, TimeUnit.SECONDS, ioScheduler)
         .observeOn(uiScheduler)
         .doOnNext(refreshNumber -> {
@@ -61,11 +67,27 @@ class StopDetailPresenter extends BasePresenter<StopDetailPresenter.View> {
         }, Throwable::printStackTrace));
   }
 
+  @NonNull private List<String> getFilteredFacilities(final StopPoint stopPoint) {
+    final List<String> facilities = new ArrayList<>();
+    for (final StopProperty stopProperty : stopPoint.additionalProperties()) {
+      if (stopProperty.category().equalsIgnoreCase("Facility")
+          && !stopProperty.value()
+          .equalsIgnoreCase("no")
+          && !stopProperty.value().equalsIgnoreCase("0")
+          && !stopProperty.key().equalsIgnoreCase("Other Facilities")) {
+        facilities.add(stopProperty.key());
+      }
+    }
+    return facilities;
+  }
+
   interface View extends PresenterView {
     void setStopName(@NonNull String stopName);
 
     void setDepartures(@NonNull List<Departure> departures);
 
     void setNextRefreshTime(int nextRefreshInSeconds);
+
+    void setFacilities(List<String> facilities);
   }
 }

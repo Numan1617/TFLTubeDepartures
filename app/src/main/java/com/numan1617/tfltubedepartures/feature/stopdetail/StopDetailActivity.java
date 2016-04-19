@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.numan1617.tfltubedepartures.R;
@@ -15,6 +16,7 @@ import com.numan1617.tfltubedepartures.base.BasePresenter;
 import com.numan1617.tfltubedepartures.network.model.Departure;
 import com.numan1617.tfltubedepartures.network.model.StopPoint;
 import java.util.List;
+import org.apmem.tools.layouts.FlowLayout;
 
 import static com.numan1617.tfltubedepartures.feature.stopdetail.StopDetailModule.stopDetailPresenter;
 
@@ -28,6 +30,7 @@ public class StopDetailActivity extends BaseActivity<StopDetailPresenter.View>
   @Bind(R.id.text_view_stop_name) TextView stopNameText;
   @Bind(R.id.recycler_view_departure_list) RecyclerView departureList;
   @Bind(R.id.text_view_refresh_in) TextView refreshInText;
+  @Bind(R.id.flow_layout_facilities) FlowLayout facilitiesLayout;
 
   public static Intent getStartIntent(@NonNull final Context context,
       @NonNull final StopPoint stopPoint) {
@@ -85,5 +88,16 @@ public class StopDetailActivity extends BaseActivity<StopDetailPresenter.View>
 
   @Override public void setNextRefreshTime(final int nextRefreshInSeconds) {
     refreshInText.setText(getString(R.string.departure_refresh_in, nextRefreshInSeconds));
+  }
+
+  @Override public void setFacilities(@NonNull final List<String> facilities) {
+    facilitiesLayout.removeAllViews();
+    final LayoutInflater layoutInflater = LayoutInflater.from(this);
+    for (final String facility : facilities) {
+      final TextView inflatedView =
+          (TextView) layoutInflater.inflate(R.layout.view_facility, facilitiesLayout, false);
+      inflatedView.setText(facility);
+      facilitiesLayout.addView(inflatedView);
+    }
   }
 }
