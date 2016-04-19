@@ -1,4 +1,5 @@
 <resources>
   <string name="app_name">TFLTubeDepartures</string>
   <string name="no_stops_nearby">No stops returned</string>
+  <string name="departure_line_destination">%1$s line to %2$s</string>
 </resources>
