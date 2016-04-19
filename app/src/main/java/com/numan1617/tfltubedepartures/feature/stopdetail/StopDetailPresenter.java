@@ -13,6 +13,8 @@ import rx.Observable;
 import rx.Scheduler;
 
 class StopDetailPresenter extends BasePresenter<StopDetailPresenter.View> {
+  private static final int REFRESH_INTERVAL = 30;
+
   private final Scheduler uiScheduler;
   private final Scheduler ioScheduler;
   private final TflService tflService;
@@ -33,7 +35,14 @@ class StopDetailPresenter extends BasePresenter<StopDetailPresenter.View> {
   public void setStopPoint(final StopPoint stopPoint) {
     view.setStopName(stopPoint.commonName());
     unsubscribeOnViewDetach(Observable.interval(1, TimeUnit.SECONDS, ioScheduler)
-        .filter(aLong -> aLong % 30 == 0)
+        .observeOn(uiScheduler)
+        .doOnNext(refreshNumber -> {
+          final int nextRefreshInSeconds =
+              (int) (REFRESH_INTERVAL - (refreshNumber % REFRESH_INTERVAL));
+          view.setNextRefreshTime(nextRefreshInSeconds);
+        })
+        .observeOn(ioScheduler)
+        .filter(aLong -> aLong % REFRESH_INTERVAL == 0)
         .flatMap(ignored -> tflService.departures(stopPoint.id()))
         .repeat()
         .map(departures -> {
@@ -56,5 +65,7 @@ class StopDetailPresenter extends BasePresenter<StopDetailPresenter.View> {
     void setStopName(@NonNull String stopName);
 
     void setDepartures(@NonNull List<Departure> departures);
+
+    void setNextRefreshTime(int nextRefreshInSeconds);
   }
 }

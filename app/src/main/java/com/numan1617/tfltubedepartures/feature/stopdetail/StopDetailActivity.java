@@ -27,6 +27,7 @@ public class StopDetailActivity extends BaseActivity<StopDetailPresenter.View>
 
   @Bind(R.id.text_view_stop_name) TextView stopNameText;
   @Bind(R.id.recycler_view_departure_list) RecyclerView departureList;
+  @Bind(R.id.text_view_refresh_in) TextView refreshInText;
 
   public static Intent getStartIntent(@NonNull final Context context,
       @NonNull final StopPoint stopPoint) {
@@ -80,5 +81,9 @@ public class StopDetailActivity extends BaseActivity<StopDetailPresenter.View>
 
   @Override public void setDepartures(@NonNull final List<Departure> departures) {
     departureAdapter.setData(departures);
+  }
+
+  @Override public void setNextRefreshTime(final int nextRefreshInSeconds) {
+    refreshInText.setText(getString(R.string.departure_refresh_in, nextRefreshInSeconds));
   }
 }

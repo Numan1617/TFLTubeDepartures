@@ -117,4 +117,27 @@ public class StopDetailPresenterTest
     ioTestScheduler.advanceTimeBy(1, TimeUnit.SECONDS);
     verify(view).setDepartures(sortedDepartures);
   }
+
+  @Test public void everySecond_updateRefreshTime() {
+    presenterOnViewAttached();
+
+    final StopPoint stopPoint = mock(StopPoint.class);
+    final String stopId = "StopId";
+    when(stopPoint.id()).thenReturn(stopId);
+
+    final Departure departure = mock(Departure.class);
+    when(departure.timeToStation()).thenReturn(1000L);
+
+    final List<Departure> departures = Arrays.asList(departure, departure, departure, departure);
+    when(tflService.departures(any())).thenReturn(Observable.just(departures));
+
+    presenter.setStopPoint(stopPoint);
+
+    ioTestScheduler.advanceTimeBy(1, TimeUnit.SECONDS);
+    verify(view).setNextRefreshTime(30);
+    ioTestScheduler.advanceTimeBy(1, TimeUnit.SECONDS);
+    verify(view).setNextRefreshTime(29);
+    ioTestScheduler.advanceTimeBy(1, TimeUnit.SECONDS);
+    verify(view).setNextRefreshTime(28);
+  }
 }
