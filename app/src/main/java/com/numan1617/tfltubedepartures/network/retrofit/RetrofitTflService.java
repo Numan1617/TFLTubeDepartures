@@ -18,18 +18,13 @@ import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import retrofit.http.GET;
 import retrofit.http.Path;
+import retrofit.http.Query;
 import rx.Observable;
 
 public class RetrofitTflService implements TflService {
-
   private final Api api;
-  private final String appId;
-  private final String apiKey;
 
   public RetrofitTflService(@NonNull final String appId, @NonNull final String apiKey) {
-    this.appId = appId;
-    this.apiKey = apiKey;
-
     final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
     logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
@@ -61,8 +56,9 @@ public class RetrofitTflService implements TflService {
     this.api = restAdapter.create(Api.class);
   }
 
-  @Override public Observable<List<StopPoint>> stopPoint() {
-    return api.stopPoint().map(StopPointResponse::stopPoints);
+  @Override
+  public Observable<List<StopPoint>> stopPoint(final double latitude, final double longitude) {
+    return api.stopPoint(latitude, longitude).map(StopPointResponse::stopPoints);
   }
 
   @Override public Observable<List<Departure>> departures(final String stopPointId) {
@@ -70,12 +66,11 @@ public class RetrofitTflService implements TflService {
   }
 
   private interface Api {
-    @GET("/StopPoint?lat=51.5065&lon=-0.2081&stopTypes=NaptanMetroStation,NaptanRailStation&radius=900&useStopPointHierarchy=false&returnLines=True")
-    Observable<StopPointResponse> stopPoint();
+    @GET("/StopPoint?stopTypes=NaptanMetroStation&radius=900&useStopPointHierarchy=false&returnLines=True")
+    Observable<StopPointResponse> stopPoint(@Query("lat") double latitude,
+        @Query("lon") double longitude);
 
-    @GET("/StopPoint/{stopPointId}/Arrivals")
-    Observable<List<Departure>> departures(
-        @Path("stopPointId") String stopPointId
-    );
+    @GET("/StopPoint/{stopPointId}/Arrivals") Observable<List<Departure>> departures(
+        @Path("stopPointId") String stopPointId);
   }
 }
