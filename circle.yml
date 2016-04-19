@@ -1,0 +1,10 @@
+dependencies:
+    override:
+        - echo y | android update sdk --no-ui --all --filter tool
+        - echo y | android update sdk --no-ui --all --filter build-tools-23.0.2
+
+test:
+  override:
+        - ./gradlew test assembleDebug -PdisablePreDex
+        - cp -r app/build/outputs/apk $CIRCLE_ARTIFACTS
+        - cp -r app/build/reports/tests/* $CIRCLE_TEST_REPORTS
