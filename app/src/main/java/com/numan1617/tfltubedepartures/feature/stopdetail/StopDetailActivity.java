@@ -10,7 +10,9 @@ import butterknife.Bind;
 import com.numan1617.tfltubedepartures.R;
 import com.numan1617.tfltubedepartures.base.BaseActivity;
 import com.numan1617.tfltubedepartures.base.BasePresenter;
+import com.numan1617.tfltubedepartures.network.model.Departure;
 import com.numan1617.tfltubedepartures.network.model.StopPoint;
+import java.util.List;
 
 import static com.numan1617.tfltubedepartures.feature.stopdetail.StopDetailModule.stopDetailPresenter;
 
@@ -64,5 +66,9 @@ public class StopDetailActivity extends BaseActivity<StopDetailPresenter.View>
 
   @Override public void setStopName(@NonNull final String stopName) {
     stopNameText.setText(stopName);
+  }
+
+  @Override public void setDepartures(List<Departure> departures) {
+
   }
 }
