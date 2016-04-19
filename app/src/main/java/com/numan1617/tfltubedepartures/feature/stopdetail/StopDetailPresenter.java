@@ -32,29 +32,29 @@ class StopDetailPresenter extends BasePresenter<StopDetailPresenter.View> {
 
   public void setStopPoint(final StopPoint stopPoint) {
     view.setStopName(stopPoint.commonName());
-    unsubscribeOnViewDetach(
-        Observable.interval(1, TimeUnit.SECONDS, ioScheduler)
-            .filter(aLong -> aLong % 30 == 0)
-            .flatMap(ignored -> tflService.departures(stopPoint.id()))
-            .map(departures -> {
-              Collections.sort(departures, new DepartureArrivalComparator());
-              return departures;
-            })
-            .flatMapIterable(departures -> departures)
-            .limit(3)
-            .toList()
-        .subscribe(
-            departures -> {
-              view.setDepartures(departures);
-            },
-            Throwable::printStackTrace
-        )
-    );
+    unsubscribeOnViewDetach(Observable.interval(1, TimeUnit.SECONDS, ioScheduler)
+        .filter(aLong -> aLong % 30 == 0)
+        .flatMap(ignored -> tflService.departures(stopPoint.id()))
+        .repeat()
+        .map(departures -> {
+          Collections.sort(departures, new DepartureArrivalComparator());
+          return departures;
+        })
+        .map(departures -> {
+          if (departures.size() >= 3) {
+            return departures.subList(0, 3);
+          }
+          return departures;
+        })
+        .observeOn(uiScheduler)
+        .subscribe(departures -> {
+          view.setDepartures(departures);
+        }, Throwable::printStackTrace));
   }
 
   interface View extends PresenterView {
     void setStopName(@NonNull String stopName);
 
-    void setDepartures(List<Departure> departures);
+    void setDepartures(@NonNull List<Departure> departures);
   }
 }
