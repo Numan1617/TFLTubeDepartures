@@ -86,4 +86,8 @@ public class StopDetailActivity extends BaseActivity<StopDetailPresenter.View>
   @Override public void setNextRefreshTime(final int nextRefreshInSeconds) {
     refreshInText.setText(getString(R.string.departure_refresh_in, nextRefreshInSeconds));
   }
+
+  @Override public void setFacilities(@NonNull final List<String> facilities) {
+
+  }
 }
