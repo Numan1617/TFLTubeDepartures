@@ -11,6 +11,9 @@ import rx.Observable;
 import rx.Scheduler;
 
 public class MainPresenter extends BasePresenter<MainPresenter.View> {
+  static final double DEFAULT_LATITUDE = 51.5033;
+  static final double DEFAULT_LONGITUDE = 0.1195;
+
   private final TflService tflService;
   private final Scheduler uiScheduler;
   private final Scheduler ioScheduler;
@@ -61,25 +64,33 @@ public class MainPresenter extends BasePresenter<MainPresenter.View> {
 
   private void getLocationAndUpdateStops() {
     googleApiClientWrapper.registerConnectionCallbacks(() -> {
-      final LatLng latLng = locationRequester.lastLocation(googleApiClientWrapper);
+      LatLng latLng = locationRequester.lastLocation(googleApiClientWrapper);
 
-      if (latLng != null) {
-        view.showLoadingView(true);
-
-        unsubscribeOnViewDetach(tflService.stopPoint(latLng.latitude(), latLng.longitude())
-            .observeOn(uiScheduler)
-            .subscribeOn(ioScheduler)
-            .subscribe(stopPoints -> {
-              view.showLoadingView(false);
-              if (stopPoints.size() == 0) {
-                view.showNoStopsView(true);
-              } else {
-                view.setStopPoints(stopPoints);
-              }
-            }, Throwable::printStackTrace));
+      if (latLng == null || !isInLondon(latLng)) {
+        latLng = LatLng.create(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
       }
+      view.showLoadingView(true);
+
+      unsubscribeOnViewDetach(tflService.stopPoint(latLng.latitude(), latLng.longitude())
+          .observeOn(uiScheduler)
+          .subscribeOn(ioScheduler)
+          .subscribe(stopPoints -> {
+            view.showLoadingView(false);
+            if (stopPoints.size() == 0) {
+              view.showNoStopsView(true);
+            } else {
+              view.setStopPoints(stopPoints);
+            }
+          }, Throwable::printStackTrace));
     });
     googleApiClientWrapper.connect();
+  }
+
+  private boolean isInLondon(@NonNull final LatLng latLng) {
+    return (latLng.latitude() > 51.288923
+        && latLng.latitude() < 51.706130
+        && latLng.longitude() > -0.524597
+        && latLng.longitude() < 0.280151);
   }
 
   interface View extends PresenterView {
