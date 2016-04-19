@@ -141,7 +141,7 @@ public class MainPresenterTest extends BasePresenterTest<MainPresenter, MainPres
     when(locationRequester.lastLocation(any())).thenReturn(latLng);
     presenterOnViewAttached();
 
-    verify(tflService).stopPoint(1., 1.);
+    verify(tflService).stopPoint(anyDouble(), anyDouble());
   }
 
   @Test public void permissionGranted_requestLocation() {
@@ -155,6 +155,20 @@ public class MainPresenterTest extends BasePresenterTest<MainPresenter, MainPres
 
     presenter.locationPermissionGranted();
 
-    verify(tflService).stopPoint(1., 1.);
+    verify(tflService).stopPoint(anyDouble(), anyDouble());
+  }
+
+  @Test public void locationReceivedOutsideLondon_setDefaultLocation() {
+    when(view.hasLocationPermission()).thenReturn(false);
+    presenterOnViewAttached();
+
+    final LatLng latLng = mock(LatLng.class);
+    when(latLng.latitude()).thenReturn(50.);
+    when(latLng.longitude()).thenReturn(50.);
+    when(locationRequester.lastLocation(any())).thenReturn(latLng);
+
+    presenter.locationPermissionGranted();
+
+    verify(tflService).stopPoint(MainPresenter.DEFAULT_LATITUDE, MainPresenter.DEFAULT_LONGITUDE);
   }
 }
