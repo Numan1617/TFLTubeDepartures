@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="16dp"
     android:orientation="vertical"
     tools:context=".feature.stopdetail.StopDetailActivity"
     >
@@ -11,6 +12,9 @@
       android:id="@+id/text_view_stop_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+      tools:text="Stop name"
       />
 
   <org.apmem.tools.layouts.FlowLayout
@@ -30,7 +34,7 @@
       android:id="@+id/text_view_refresh_in"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      tools:text="Refreshing in 30 seconds"
       android:layout_gravity="end"
+      tools:text="Refreshing in 30 seconds"
       />
 </LinearLayout>
