@@ -1,4 +1,10 @@
 <resources>
   <string name="app_name">TFLTubeDepartures</string>
   <string name="no_stops_nearby">No stops returned</string>
+  <string name="departure_line_destination">%1$s line to %2$s</string>
+
+  <string name="departure_due_now">Due now</string>
+  <string name="departure_due_less_than_a_minute">Less than 1 minute</string>
+  <string name="departure_due_in_minutes">%d minutes</string>
+  <string name="departure_refresh_in">Refreshing in %ds</string>
 </resources>

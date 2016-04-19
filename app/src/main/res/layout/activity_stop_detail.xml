@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.stopdetail.StopDetailActivity">
+    android:orientation="vertical"
+    tools:context=".feature.stopdetail.StopDetailActivity"
+    >
 
   <TextView
       android:id="@+id/text_view_stop_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      />
+
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycler_view_departure_list"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      />
+
+  <TextView
+      android:id="@+id/text_view_refresh_in"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      tools:text="Refreshing in 30 seconds"
+      android:layout_gravity="end"
       />
 </LinearLayout>
