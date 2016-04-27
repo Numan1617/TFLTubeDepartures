@@ -1,6 +1,6 @@
 dependencies:
     override:
-        - echo y | android update sdk --no-ui --all --filter tool
+        - ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --all --filter tools,extra-android-support
         - echo y | android update sdk --no-ui --all --filter build-tools-23.0.2
 
 test:

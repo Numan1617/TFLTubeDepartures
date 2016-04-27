@@ -50,8 +50,7 @@ dependencies {
 
   compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
 
-  compile 'com.jakewharton:butterknife:8.0.0-SNAPSHOT'
-  apt 'com.jakewharton:butterknife-compiler:8.0.0-SNAPSHOT'
+  compile 'com.jakewharton:butterknife:7.0.1'
 
   apt 'frankiesardo:auto-parcel:1.0.1'
 
